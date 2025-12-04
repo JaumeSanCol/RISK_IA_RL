@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<ruleset>
+  <continent name = "Asia" value="7" />
+  <continent name = "North America" value="5" />
+  <continent name = "South America" value="2" />
+  <continent name = "Africa" value="3" />
+  <continent name = "Europe" value="5" />
+  <continent name = "Australia" value="2" />
+  <cards>
+    <picture>Cannon</picture>
+    <picture>Horse</picture>
+    <picture>Soldier</picture>
+    <card>4</card>
+    <card>6</card>
+    <card>8</card>
+    <card>10</card>
+    <card>12</card>
+    <card>15</card>
+    <increase>5</increase>
+  </cards>
+  <territories>
+    <territory name="Alaska" continent="North America">
+      <neighbor>Northwest Territories</neighbor>
+      <neighbor>British Columbia</neighbor>
+      <neighbor>Kamchatka</neighbor>
+    </territory>
+    <territory name="Northwest Territories" continent="North America">
+      <neighbor>Alaska</neighbor>
+      <neighbor>British Columbia</neighbor>
+      <neighbor>Ontario</neighbor>
+      <neighbor>Greenland</neighbor>
+    </territory>
+    <territory name="Greenland" continent="North America">
+      <neighbor>Northwest Territories</neighbor>
+      <neighbor>Ontario</neighbor>
+      <neighbor>Iceland</neighbor>
+      <neighbor>Quebec</neighbor>
+    </territory>
+    <territory name="British Columbia" continent="North America">
+      <neighbor>Alaska</neighbor>
+      <neighbor>Northwest Territories</neighbor>
+      <neighbor>Ontario</neighbor>
+      <neighbor>Western U.S.</neighbor>
+    </territory>
+    <territory name="Ontario" continent="North America">
+      <neighbor>Greenland</neighbor>
+      <neighbor>Northwest Territories</neighbor>
+      <neighbor>British Columbia</neighbor>
+      <neighbor>Western U.S.</neighbor>
+      <neighbor>Eastern U.S.</neighbor>
+      <neighbor>Quebec</neighbor>
+    </territory>
+    <territory name="Quebec" continent="North America">
+      <neighbor>Greenland</neighbor>
+      <neighbor>Eastern U.S.</neighbor>
+      <neighbor>Ontario</neighbor>
+    </territory>
+    <territory name="Western U.S." continent="North America">
+      <neighbor>British Columbia</neighbor>
+      <neighbor>Ontario</neighbor>
+      <neighbor>Eastern U.S.</neighbor>
+      <neighbor>Mexico</neighbor>
+    </territory>
+    <territory name="Eastern U.S." continent="North America">
+      <neighbor>Ontario</neighbor>
+      <neighbor>Western U.S.</neighbor>
+      <neighbor>Mexico</neighbor>
+      <neighbor>Quebec</neighbor>
+    </territory>
+    <territory name="Mexico" continent="North America">
+      <neighbor>Western U.S.</neighbor>
+      <neighbor>Eastern U.S.</neighbor>
+      <neighbor>Colombia</neighbor>
+    </territory>
+    <territory name="Colombia" continent="South America">
+      <neighbor>Mexico</neighbor>
+      <neighbor>Peru</neighbor>
+      <neighbor>Brazil</neighbor>
+    </territory>
+    <territory name="Brazil" continent="South America">
+      <neighbor>Colombia</neighbor>
+      <neighbor>Peru</neighbor>
+      <neighbor>Chile</neighbor>
+      <neighbor>Western Africa</neighbor>
+    </territory>
+    <territory name="Peru" continent="South America">
+      <neighbor>Colombia</neighbor>
+      <neighbor>Brazil</neighbor>
+      <neighbor>Chile</neighbor>
+    </territory>
+    <territory name="Chile" continent="South America">
+      <neighbor>Peru</neighbor>
+      <neighbor>Brazil</neighbor>
+    </territory>
+    <territory name="South Africa" continent="Africa">
+      <neighbor>Zaire</neighbor>
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>Madagascar</neighbor>
+    </territory>
+    <territory name="Zaire" continent="Africa">
+      <neighbor>Western Africa</neighbor>
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>South Africa</neighbor>
+    </territory>
+    <territory name="Ethiopia" continent="Africa">
+      <neighbor>Middle East</neighbor>
+      <neighbor>Egypt</neighbor>
+      <neighbor>Western Africa</neighbor>
+      <neighbor>Zaire</neighbor>
+      <neighbor>South Africa</neighbor>
+      <neighbor>Madagascar</neighbor>
+    </territory>
+    <territory name="Western Africa" continent="Africa">
+      <neighbor>Brazil</neighbor>
+      <neighbor>Zaire</neighbor>
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>Egypt</neighbor>
+      <neighbor>Western Europe</neighbor>
+    </territory>
+    <territory name="Egypt" continent="Africa">
+      <neighbor>Western Africa</neighbor>
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>Middle East</neighbor>
+      <neighbor>Southern Europe</neighbor>
+    </territory>
+    <territory name="Madagascar" continent="Africa">
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>South Africa</neighbor>
+    </territory>
+    <territory name="Western Europe" continent="Europe">
+      <neighbor>Western Africa</neighbor>
+      <neighbor>Southern Europe</neighbor>
+      <neighbor>Central Europe</neighbor>
+      <neighbor>Great Britain</neighbor>
+    </territory>
+    <territory name="Great Britain" continent="Europe">
+      <neighbor>Western Europe</neighbor>
+      <neighbor>Central Europe</neighbor>
+      <neighbor>Sweden</neighbor>
+      <neighbor>Iceland</neighbor>
+    </territory>
+    <territory name="Iceland" continent="Europe">
+      <neighbor>Greenland</neighbor>
+      <neighbor>Great Britain</neighbor>
+      <neighbor>Sweden</neighbor>
+    </territory>
+    <territory name="Sweden" continent="Europe">
+      <neighbor>Iceland</neighbor>
+      <neighbor>Great Britain</neighbor>
+      <neighbor>Central Europe</neighbor>
+      <neighbor>Ukraine</neighbor>
+    </territory>
+    <territory name="Central Europe" continent="Europe">
+      <neighbor>Sweden</neighbor>
+      <neighbor>Great Britain</neighbor>
+      <neighbor>Western Europe</neighbor>
+      <neighbor>Southern Europe</neighbor>
+      <neighbor>Ukraine</neighbor>
+    </territory>
+    <territory name="Southern Europe" continent="Europe">
+      <neighbor>Western Europe</neighbor>
+      <neighbor>Central Europe</neighbor>
+      <neighbor>Ukraine</neighbor>
+      <neighbor>Middle East</neighbor>
+      <neighbor>Egypt</neighbor>
+    </territory>
+    <territory name="Ukraine" continent="Europe">
+      <neighbor>Sweden</neighbor>
+      <neighbor>Central Europe</neighbor>
+      <neighbor>Southern Europe</neighbor>
+      <neighbor>Middle East</neighbor>
+      <neighbor>Pakistan</neighbor>
+      <neighbor>Russia</neighbor>
+    </territory>
+    <territory name="Middle East" continent="Asia">
+      <neighbor>Egypt</neighbor>
+      <neighbor>Ethiopia</neighbor>
+      <neighbor>Southern Europe</neighbor>
+      <neighbor>Ukraine</neighbor>
+      <neighbor>Pakistan</neighbor>
+      <neighbor>India</neighbor>
+    </territory>
+    <territory name="Pakistan" continent="Asia">
+      <neighbor>Middle East</neighbor>
+      <neighbor>Ukraine</neighbor>
+      <neighbor>India</neighbor>
+      <neighbor>China</neighbor>
+      <neighbor>Russia</neighbor>
+    </territory>
+    <territory name="Russia" continent="Asia">
+      <neighbor>Ukraine</neighbor>
+      <neighbor>Pakistan</neighbor>
+      <neighbor>China</neighbor>
+      <neighbor>Siberia</neighbor>
+    </territory>
+    <territory name="India" continent="Asia">
+      <neighbor>Middle East</neighbor>
+      <neighbor>Pakistan</neighbor>
+      <neighbor>China</neighbor>
+      <neighbor>Laos</neighbor>
+    </territory>
+    <territory name="Laos" continent="Asia">
+      <neighbor>India</neighbor>
+      <neighbor>China</neighbor>
+      <neighbor>Indonesia</neighbor>
+    </territory>
+    <territory name="China" continent="Asia">
+      <neighbor>Laos</neighbor>
+      <neighbor>India</neighbor>
+      <neighbor>Pakistan</neighbor>
+      <neighbor>Siberia</neighbor>
+      <neighbor>Manchuria</neighbor>
+      <neighbor>Russia</neighbor>
+    </territory>
+    <territory name="Manchuria" continent="Asia">
+      <neighbor>China</neighbor>
+      <neighbor>Siberia</neighbor>
+      <neighbor>Irkutsk</neighbor>
+      <neighbor>Kamchatka</neighbor>
+      <neighbor>Japan</neighbor>
+    </territory>
+    <territory name="Japan" continent="Asia">
+      <neighbor>Kamchatka</neighbor>
+      <neighbor>Manchuria</neighbor>
+    </territory>
+    <territory name="Siberia" continent="Asia">
+      <neighbor>China</neighbor>
+      <neighbor>Manchuria</neighbor>
+      <neighbor>Irkutsk</neighbor>
+      <neighbor>Eastern Russia</neighbor>
+      <neighbor>Russia</neighbor>
+    </territory>
+    <territory name="Irkutsk" continent="Asia">
+      <neighbor>Siberia</neighbor>
+      <neighbor>Manchuria</neighbor>
+      <neighbor>Kamchatka</neighbor>
+      <neighbor>Eastern Russia</neighbor>
+    </territory>
+    <territory name="Eastern Russia" continent="Asia">
+      <neighbor>Siberia</neighbor>
+      <neighbor>Irkutsk</neighbor>
+      <neighbor>Kamchatka</neighbor>
+    </territory>
+    <territory name="Kamchatka" continent="Asia">
+      <neighbor>Eastern Russia</neighbor>
+      <neighbor>Irkutsk</neighbor>
+      <neighbor>Manchuria</neighbor>
+      <neighbor>Japan</neighbor>
+      <neighbor>Alaska</neighbor>
+    </territory>
+    <territory name="Indonesia" continent="Australia">
+      <neighbor>Laos</neighbor>
+      <neighbor>New Guinea</neighbor>
+      <neighbor>Western Australia</neighbor>
+    </territory>
+    <territory name="New Guinea" continent="Australia">
+      <neighbor>Indonesia</neighbor>
+      <neighbor>Western Australia</neighbor>
+      <neighbor>Eastern Australia</neighbor>
+    </territory>
+    <territory name="Western Australia" continent="Australia">
+      <neighbor>Indonesia</neighbor>
+      <neighbor>New Guinea</neighbor>
+      <neighbor>Eastern Australia</neighbor>
+    </territory>
+    <territory name="Eastern Australia" continent="Australia">
+      <neighbor>Western Australia</neighbor>
+      <neighbor>New Guinea</neighbor>
+    </territory>
+  </territories>
+</ruleset>

@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<graphics width="786" height="500">
+  <board>riskboard.png</board>
+  <territory name="Alaska">
+    <file>images/Alaska.png</file>
+    <attributes x="39" y="75" w="61" h="83" cx="35" cy="30" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Northwest Territories">
+    <file>images/Inuktitut.png</file>
+    <attributes x="102" y="38" w="68" h="87" cx="34" cy="63" />
+    <floodpoint x="53" y="23"/>
+    <floodpoint x="29" y="65"/>
+  </territory>
+  <territory name="Greenland">
+    <file>images/Greenland.png</file>
+    <attributes x="172" y="36" w="118" h="97" cx="87" cy="43" />
+    <floodpoint x="92" y="36"/>
+    <floodpoint x="44" y="54"/>
+    <floodpoint x="15" y="70"/>
+  </territory>
+  <territory name="British Columbia">
+    <file>images/British Columbia.png</file>
+    <attributes x="102" y="120" w="53" h="54" cx="27" cy="27" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Ontario">
+    <file>images/Ontario.png</file>
+    <attributes x="156" y="125" w="55" h="61" cx="16" cy="36" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Quebec">
+    <file>images/Quebec.png</file>
+    <attributes x="209" y="136" w="63" h="49" cx="25" cy="33" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Western U.S.">
+    <file>images/Western U.S..png</file>
+    <attributes x="114" y="174" w="47" h="59" cx="21" cy="27" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Eastern U.S.">
+    <file>images/Eastern U.S..png</file>
+    <attributes x="163" y="177" w="94" h="71" cx="22" cy="33" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Mexico">
+    <file>images/Mexico.png</file>
+    <attributes x="127" y="226" w="77" h="71" cx="37" cy="26" />
+    <floodpoint x="38" y="26"/>
+  </territory>
+  <territory name="Colombia">
+    <file>images/Colombia.png</file>
+    <attributes x="182" y="288" w="67" h="31" cx="28" cy="11" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Brazil">
+    <file>images/Brazil.png</file>
+    <attributes x="205" y="306" w="80" h="96" cx="45" cy="37" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Peru">
+    <file>images/Peru.png</file>
+    <attributes x="180" y="321" w="62" h="68" cx="42" cy="39" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Chile">
+    <file>images/Chile.png</file>
+    <attributes x="214" y="383" w="30" h="85" cx="10" cy="35" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="South Africa">
+    <file>images/South Africa.png</file>
+    <attributes x="352" y="353" w="58" h="68" cx="27" cy="33" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Zaire">
+    <file>images/Zaire.png</file>
+    <attributes x="349" y="315" w="42" h="43" cx="21" cy="22" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Ethiopia">
+    <file>images/Ethiopia.png</file>
+    <attributes x="367" y="287" w="71" h="78" cx="34" cy="34" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Madagascar">
+    <file>images/Madagascar.png</file>
+    <attributes x="416" y="350" w="36" h="56" cx="16" cy="32" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Western Africa">
+    <file>images/Western Africa.png</file>
+    <attributes x="297" y="248" w="72" h="84" cx="34" cy="40" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Egypt">
+    <file>images/Egypt.png</file>
+    <attributes x="356" y="252" w="58" h="37" cx="25" cy="18" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Western Europe">
+    <file>images/Western Europe.png</file>
+    <attributes x="319" y="204" w="41" h="41" cx="27" cy="15" />
+    <floodpoint x="25" y="25"/>
+  </territory>
+  <territory name="Great Britain">
+    <file>images/Great Britain.png</file>
+    <attributes x="312" y="173" w="32" h="35" cx="22" cy="22" />
+    <floodpoint x="20" y="20"/>
+    <floodpoint x="5" y="27"/>
+  </territory>
+  <territory name="Iceland">
+    <file>images/Iceland.png</file>
+    <attributes x="288" y="139" w="32" h="19" cx="9" cy="10" />
+    <floodpoint x="14" y="10"/>
+  </territory>
+  <territory name="Sweden">
+    <file>images/Sweden.png</file>
+    <attributes x="348" y="129" w="39" h="54" cx="11" cy="36" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Central Europe">
+    <file>images/Central Europe.png</file>
+    <attributes x="349" y="175" w="44" h="38" cx="22" cy="20" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Southern Europe">
+    <file>images/Southern Europe.png</file>
+    <attributes x="359" y="204" w="48" h="37" cx="27" cy="8" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Ukraine">
+    <file>images/Ukraine.png</file>
+    <attributes x="376" y="129" w="91" h="104" cx="48" cy="50" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Middle East">
+    <file>images/Middle East.png</file>
+    <attributes x="397" y="209" w="72" h="89" cx="34" cy="58" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Russia">
+    <file>images/Russia.png</file>
+    <attributes x="456" y="48" w="114" h="161" cx="48" cy="101"/>
+    <floodpoint x="54" y="82"/>
+  </territory>
+  <territory name="Pakistan">
+    <file>images/Pakistan.png</file>
+    <attributes x="448" y="186" w="63" h="76" cx="28" cy="37" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="India">
+    <file>images/India.png</file>
+    <attributes x="468" y="231" w="59" h="75" cx="33" cy="33" />
+    <floodpoint x="33" y="33"/>
+  </territory>
+  <territory name="Laos">
+    <file>images/Laos.png</file>
+    <attributes x="525" y="264" w="53" h="59" cx="30" cy="20" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="China">
+    <file>images/China.png</file>
+    <attributes x="503" y="199" w="103" h="83" cx="54" cy="38" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Manchuria">
+    <file>images/Manchuria.png</file>
+    <attributes x="561" y="194" w="69" h="47" cx="47" cy="15" />
+    <floodpoint x="48" y="15"/>
+  </territory>
+  <territory name="Japan">
+    <file>images/Japan.png</file>
+    <attributes x="636" y="187" w="41" h="52" cx="29" cy="32" />
+    <floodpoint x="31" y="33"/>
+  </territory>
+  <territory name="Siberia">
+    <file>images/Siberia.png</file>
+    <attributes x="530" y="85" w="84" h="119" cx="36" cy="67" />
+    <floodpoint x="39" y="56"/>
+  </territory>
+  <territory name="Irkutsk">
+    <file>images/Irkutsk.png</file>
+    <attributes x="583" y="132" w="65" h="64" cx="29" cy="34" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Eastern Russia">
+    <file>images/Eastern Russia.png</file>
+    <attributes x="601" y="86" w="104" h="68" cx="62" cy="26" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Kamchatka">
+    <file>images/Kamchatka.png</file>
+    <attributes x="629" y="90" w="126" h="118" cx="75" cy="50" />
+    <floodpoint x="87" y="47"/>
+  </territory>
+  <territory name="Indonesia">
+    <file>images/Indonesia.png</file>
+    <attributes x="561" y="309" w="79" h="50" cx="43" cy="15" />
+    <floodpoint x="47" y="17"/>
+    <floodpoint x="26" y="40"/>
+  </territory>
+  <territory name="New Guinea">
+    <file>images/New Guinea.png</file>
+    <attributes x="644" y="322" w="63" h="22" cx="24" cy="8" />
+    <floodpoint x="29" y="8"/>
+  </territory>
+  <territory name="Western Australia">
+    <file>images/Western Australia.png</file>
+    <attributes x="622" y="356" w="40" h="57" cx="18" cy="29" />
+    <floodpoint x="20" y="20"/>
+  </territory>
+  <territory name="Eastern Australia">
+    <file>images/Eastern Australia.png</file>
+    <attributes x="664" y="358" w="39" h="73" cx="20" cy="30" />
+    <floodpoint x="20" y="20"/>
+    <floodpoint x="25" y="69"/>
+  </territory>
+</graphics>
