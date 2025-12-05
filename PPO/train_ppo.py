@@ -13,6 +13,8 @@ from risk_gym_env import RiskTotalControlEnv
 TIMESTEPS = 1_000_000  # Pasos totales (1M es un buen comienzo)
 LOG_DIR = "./logs_ppo/"
 
+SAVE_FREQ = 5_000
+
 # ¡ELIGE TU PERSONALIDAD AQUÍ!
 # Opciones: "aggressive", "defensive", "capitalist", "standard"
 STYLE = "aggressive"  
@@ -37,6 +39,7 @@ def main():
     os.makedirs(LOG_DIR, exist_ok=True)
     
     print(f"[TRAIN] Iniciando entrenamiento de Agente con personalidad: {STYLE.upper()}")
+    print(f"[CONFIG] Almacenamos los pesos cada {SAVE_FREQ} pasos")
     print(f"[TRAIN] Los logs se guardarán en: {LOG_DIR}")
 
     # Crear entorno vectorizado (DummyVecEnv gestiona el reset automático)
@@ -56,7 +59,7 @@ def main():
 
     # Callback para guardar el modelo cada 50k pasos (por si se va la luz)
     checkpoint_callback = CheckpointCallback(
-        save_freq=50000,
+        save_freq=SAVE_FREQ,
         save_path=LOG_DIR,
         name_prefix=MODEL_NAME
     )
