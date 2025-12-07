@@ -14,6 +14,8 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 import risktools
+
+import risktools
 from config_atrib import *
 
 class RiskTotalControlEnv(gym.Env):
@@ -186,7 +188,6 @@ class RiskTotalControlEnv(gym.Env):
         # Contar territorios propios
         my_territories = sum(1 for o in self.state.owners if o == self.player_idx)
         reward = 0
-
         # --- ESTILO: STANDARD (Equilibrado) ---
         if self.style == "standard":
             # Premia expandirse
@@ -220,85 +221,136 @@ class RiskTotalControlEnv(gym.Env):
         return reward
 
     def action_masks(self):
-        """
-        Función vital para MaskablePPO.
-        Devuelve un array booleano indicando qué acciones son legales en este estado.
-        """
-        # Obtener diccionario de acciones legales del motor
-        allowed_dict = risktools.getAllowedFaseActions(self.state)
-        
-        # 1. Máscara de TIPO DE ACCIÓN
-        mask_type = [False] * 7
-        type_map = {'Pasar': 0, 'Comprar_Soldados': 1, 'Place': 2, 'Attack': 3, 'Occupy': 4, 'Fortify': 5, 'Invertir': 6, 'PrePlace': 2}
-        
-        valid_objects = []
-        for key, actions in allowed_dict.items():
-            if key in type_map and len(actions) > 0:
+        allowed = risktools.getAllowedFaseActions(self.state)
+
+        # 1) mask del tipo de acción
+        type_map = {'Pasar':0,'Comprar_Soldados':1,'Place':2,'Attack':3,
+                    'Occupy':4,'Fortify':5,'Invertir':6,'PrePlace':2}
+
+        mask_type = [False]*7
+        for key, acts in allowed.items():
+            if key in type_map and len(acts)>0:
                 mask_type[type_map[key]] = True
-                valid_objects.extend(actions)
-        
-        if not any(mask_type): mask_type[0] = True # Fallback (Pasar)
 
-        # 2. Máscara de ORIGEN y DESTINO
-        # Habilitamos cualquier territorio que aparezca en alguna acción válida
-        mask_src = [False] * 42
-        mask_dst = [False] * 42
-        
-        for act in valid_objects:
-            if hasattr(act, 'from_territory') and act.from_territory:
-                if act.from_territory in self.board.territory_to_id:
-                    mask_src[self.board.territory_to_id[act.from_territory]] = True
-            else:
-                mask_src[0] = True # Acciones sin origen (ej. Comprar) usan el ID 0
-                
-            if hasattr(act, 'to_territory') and act.to_territory:
-                 if act.to_territory in self.board.territory_to_id:
-                    mask_dst[self.board.territory_to_id[act.to_territory]] = True
-            else:
-                mask_dst[0] = True 
+        if not any(mask_type):
+            mask_type[0] = True    # fallback
 
-        # 3. Máscara de CANTIDAD (Siempre permitimos todas, el motor recorta)
-        mask_amt = [True] * 10
-        
-        return np.concatenate([mask_type, mask_src, mask_dst, mask_amt])
+        # 2) máscaras específicas según el tipo habilitado
+        mask_src = [False]*42
+        mask_dst = [False]*42
 
+        # --- Si solo se puede Pasar / Comprar → todo es 0
+        if mask_type[0] and sum(mask_type)==1:
+            mask_src[0] = True
+            mask_dst[0] = True
+
+        else:
+            # Si hay acciones con territorios reales
+            for key, acts in allowed.items():
+                for act in acts:
+                    if hasattr(act,'from_territory') and act.from_territory:
+                        tid = self.board.territory_to_id.get(act.from_territory,None)
+                        if tid is not None:
+                            mask_src[tid] = True
+                    else:
+                        mask_src[0] = True
+
+                    if hasattr(act,'to_territory') and act.to_territory:
+                        tid = self.board.territory_to_id.get(act.to_territory,None)
+                        if tid is not None:
+                            mask_dst[tid] = True
+                    else:
+                        mask_dst[0] = True
+
+        # Cantidad siempre válida
+        mask_amt = [True]*10
+
+        return np.concatenate([mask_type,mask_src,mask_dst,mask_amt])
     def _decode_action(self, type_idx, src_id, dst_id, amt_idx):
-        """Busca la acción real que coincide con la decisión de la IA."""
+        """Convierte la acción MultiDiscrete en una acción real del motor RISK."""
+
         allowed_dict = risktools.getAllowedFaseActions(self.state)
-        map_idx_str = {0:'Pasar', 1:'Comprar_Soldados', 2:'Place', 3:'Attack', 4:'Occupy', 5:'Fortify', 6:'Invertir'}
-        
-        target_type = map_idx_str.get(type_idx)
-        if target_type == 'Place' and 'PrePlace' in allowed_dict: target_type = 'PrePlace'
-        
-        if target_type not in allowed_dict: return None
-            
+
+        # Mapeo numérico -> nombre motor
+        type_map = {
+            0: 'Pasar',
+            1: 'Comprar_Soldados',
+            2: 'Place',
+            3: 'Attack',
+            4: 'Occupy',
+            5: 'Fortify',
+            6: 'Invertir'
+        }
+
+        # Caso especial: PrePlace se usa en fase 0
+        target_type = type_map.get(type_idx)
+        if target_type == 'Place' and 'PrePlace' in allowed_dict:
+            target_type = 'PrePlace'
+
+        # Si el tipo de acción no existe en esta fase → ilegal
+        if target_type not in allowed_dict:
+            return None
+
         candidates = allowed_dict[target_type]
-        
-        # Nombres de territorios seleccionados
-        src_name = self.board.territories[src_id].name if src_id < self.n_territories else None
-        dst_name = self.board.territories[dst_id].name if dst_id < self.n_territories else None
-        
+
+        # Si no hay acciones para este tipo → ilegal
+        if not candidates:
+            return None
+
+        # Normalizador de nombres (evita mismatches por acentos/espacios/mayúsculas)
+        def norm(s):
+            if s is None:
+                return ""
+            return str(s).lower().replace(" ", "").replace("_","")
+
+        # Obtener nombres de territorios elegidos por la IA
+        src_name = None
+        dst_name = None
+
+        if src_id < self.n_territories:
+            src_name = norm(self.board.territories[src_id].name)
+
+        if dst_id < self.n_territories:
+            dst_name = norm(self.board.territories[dst_id].name)
+
         best_match = None
+
+        # Buscar coincidencia entre acción del motor y selección discreta
         for act in candidates:
+
             match_src = True
             match_dst = True
-            
-            # Filtramos por Origen y Destino
-            if hasattr(act, 'from_territory') and act.from_territory:
-                if act.from_territory != src_name: match_src = False
-            if hasattr(act, 'to_territory') and act.to_territory:
-                if act.to_territory != dst_name: match_dst = False
-            
+
+            # ----- ORIGEN -----
+            if hasattr(act, "from_territory") and act.from_territory:
+                act_src = norm(act.from_territory)
+                match_src = (act_src == src_name)
+
+            # ----- DESTINO -----
+            if hasattr(act, "to_territory") and act.to_territory:
+                act_dst = norm(act.to_territory)
+                match_dst = (act_dst == dst_name)
+
+            # ✓ Si ambos coinciden, acción encontrada
             if match_src and match_dst:
                 best_match = act
                 break
-        
-        if best_match:
-            # Inyectamos la cantidad decidida por la IA en el objeto acción
-            if hasattr(best_match, 'armies'): best_match.armies = max(1, amt_idx) 
-            if hasattr(best_match, 'amount'): best_match.amount = max(1, amt_idx)
+
+        # Si no se encontró acción → ilegal
+        if best_match is None:
+            return None
+
+        # ----- INYECCIÓN DE CANTIDAD -----
+        amount = max(1, amt_idx)
+
+        if hasattr(best_match, "armies"):
+            best_match.armies = amount
+
+        if hasattr(best_match, "amount"):
+            best_match.amount = amount
 
         return best_match
+
 
     def _get_obs(self):
         """Construye el vector de entrada para la red neuronal."""

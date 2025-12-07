@@ -92,7 +92,7 @@ def checkRevolucion(state,player):
                     if state.armies[i]>1:
                         state.armies[i]=state.armies[i]-1
         else:
-            if random.random() < 0.7:
+            if random.random() < 1:
                 #print(f"El jugador {state.players[player].name} ha sido derrocado y sucumbe al caos")
                 state.owners=[ None if x == player else x for x in state.owners]
                 state.players[player].game_over=True

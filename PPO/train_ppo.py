@@ -3,14 +3,15 @@ import time
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.wrappers import ActionMasker
 from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.vec_env import SubprocVecEnv
+import multiprocessing
 from stable_baselines3.common.callbacks import CheckpointCallback
 
 # Importamos nuestro entorno personalizado
 from risk_gym_env import RiskTotalControlEnv
 
 # --- CONFIGURACIÓN DEL ENTRENAMIENTO ---
-TIMESTEPS = 1_000_000  # Pasos totales (1M es un buen comienzo)
+TIMESTEPS = 500_000  # Pasos totales (1M es un buen comienzo)
 LOG_DIR = "./logs_ppo/"
 
 SAVE_FREQ = 5_000
@@ -42,20 +43,25 @@ def main():
     print(f"[CONFIG] Almacenamos los pesos cada {SAVE_FREQ} pasos")
     print(f"[TRAIN] Los logs se guardarán en: {LOG_DIR}")
 
-    # Crear entorno vectorizado (DummyVecEnv gestiona el reset automático)
-    env = DummyVecEnv([make_env])
+   # Detectar número de núcleos (deja uno libre para el sistema)
+    num_cpu = multiprocessing.cpu_count() - 1
+    print(f"[CONFIG] Usando {num_cpu} entornos en paralelo.")
 
-    # Inicializar el modelo PPO con soporte de máscaras
+    # Crear lista de entornos
+    # SubprocVecEnv ejecutará cada uno en un proceso separado
+    env = SubprocVecEnv([make_env for _ in range(num_cpu)])
+
     model = MaskablePPO(
-        "MlpPolicy",            # Red neuronal estándar
+        "MlpPolicy",
         env,
-        verbose=1,              # Mostrar info en consola
-        tensorboard_log=LOG_DIR, # Logs para visualizar en Tensorboard
-        learning_rate=3e-4,     # Velocidad de aprendizaje
-        gamma=0.99,             # Factor de descuento
-        batch_size=64,          # Tamaño de lote
-        ent_coef=0.01           # Coeficiente de entropía (fomenta exploración)
-    )
+        verbose=1,
+        tensorboard_log=LOG_DIR,
+        learning_rate=3e-4,
+        gamma=0.99,
+        batch_size=256,  
+        n_steps=256,    
+        ent_coef=0.01
+    )   
 
     # Callback para guardar el modelo cada 50k pasos (por si se va la luz)
     checkpoint_callback = CheckpointCallback(
@@ -87,4 +93,5 @@ def main():
     print(f"[GUARDADO] Modelo listo en: {ruta_final}.zip")
 
 if __name__ == "__main__":
+    multiprocessing.set_start_method("spawn", force=True)
     main()
