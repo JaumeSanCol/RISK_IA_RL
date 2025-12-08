@@ -29,7 +29,7 @@ class RiskTotalControlEnv(gym.Env):
     """
     metadata = {'render_modes': ['human']}
 
-    def __init__(self, enemy_ai_class=None, style="standard"):
+    def __init__(self, enemy_ai_class=None, style="standard", max_steps=3000):
         """
         Inicializa el entorno.
         
@@ -39,7 +39,7 @@ class RiskTotalControlEnv(gym.Env):
                          Define qué comportamientos se recompensan más.
         """
         super(RiskTotalControlEnv, self).__init__()
-        
+        self.max_steps = max_steps
         self.style = style
         print(f"[ENV] Inicializando entorno RISK con personalidad: {self.style.upper()}")
 
@@ -79,6 +79,8 @@ class RiskTotalControlEnv(gym.Env):
         """
         super().reset(seed=seed)
         
+        self.current_step_count = 0
+
         # 1. Crear Jugadores Nuevos
         # Usamos nombres descriptivos para facilitar el debug en logs.
         p1 = risktools.RiskPlayer(f"Agent_{self.style}", 0, 0, False, ECON_START, HAPP_START, DEVP_START)
@@ -124,7 +126,9 @@ class RiskTotalControlEnv(gym.Env):
         3. Calcula la recompensa y verifica si el juego terminó.
         """
         act_type, act_src, act_dst, act_amt = action
-        
+
+        self.current_step_count += 1
+
         # --- 1. DECODIFICACIÓN ---
         # Buscamos si la combinación elegida (ej: Atacar Alaska->Kamchatka) es legal.
         game_action = self._decode_action(act_type, act_src, act_dst, act_amt)
@@ -165,9 +169,11 @@ class RiskTotalControlEnv(gym.Env):
             # Verificamos quién ganó
             winners = [i for i, p in enumerate(self.state.players) if not p.game_over]
             if self.player_idx in winners and len(winners) == 1:
-                reward += 100 # ¡VICTORIA!
+                # ¡VICTORIA!
+                b_r=3000-self.current_step_count # bonus por rapidez
+                reward+=10_000+(b_r*5) # El multiplicador por rapidez debe ser mayor que 4.2
             else:
-                reward -= 100 # DERROTA
+                reward -= 10_000 # DERROTA
         
         # Si pasamos turno, simular al enemigo hasta que nos toque otra vez
         elif self.state.current_player != self.player_idx:
@@ -176,11 +182,18 @@ class RiskTotalControlEnv(gym.Env):
             # Verificar si morimos durante el turno enemigo
             if self.state.players[self.player_idx].game_over:
                 terminated = True
-                reward -= 100
+                reward -= 10_000
             elif self.state.turn_type == 'GameOver':
                  terminated = True
-
-        return self._get_obs(), reward, terminated, False, info
+        truncated = False
+    
+        # Si superamos el límite de turnos, cortamos la partida
+        if self.current_step_count >= self.max_steps:
+            truncated = True
+            # Opcional: Pequeña penalización por perder el tiempo
+            if not terminated: # Si no ganó ni perdió, es un empate aburrido
+                reward -= 100_000
+        return self._get_obs(), reward, terminated, truncated, info
 
     def _calculate_reward(self):
         """Define la 'personalidad' del agente mediante premios y castigos."""
