@@ -12,17 +12,16 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from risk_gym_env import RiskTotalControlEnv
 
 # --- CONFIGURACIÓN DE LA REANUDACIÓN ---
-TIMESTEPS_EXTRA = 180_000  # Cuántos pasos MÁS quieres entrenar
-TIMESTEPS_PREVIAS=420_000
+TIMESTEPS_EXTRA = 100_000  # Cuántos pasos MÁS quieres entrenar
+TIMESTEPS_PREVIAS=917784
 LOG_DIR = "./logs_ppo/"
 SAVE_FREQ = 5_000
 STYLE = "aggressive"
-
 NOMBRE_MODELO_ORIGEN = f"risk_ppo_aggressive_{TIMESTEPS_PREVIAS}_steps" 
 RUTA_MODELO_CARGA = os.path.join(LOG_DIR, f"{NOMBRE_MODELO_ORIGEN}.zip")
 
 # Nombre para el nuevo modelo (para no sobrescribir el viejo inmediatamente)
-MODEL_NAME_NUEVO = f"risk_ppo_{STYLE}_{TIMESTEPS_PREVIAS+TIMESTEPS_EXTRA}_continued"
+MODEL_NAME_NUEVO = f"risk_ppo_{STYLE}"
 
 def make_env():
     """Crea y envuelve el entorno para RL (Debe ser IDÉNTICO al original)."""
@@ -90,7 +89,7 @@ def main():
     print(f"[FIN] Entrenamiento adicional completado en {tiempo_total:.2f} minutos.")
 
     # Guardar modelo final de esta etapa
-    ruta_final = os.path.join(LOG_DIR, f"{MODEL_NAME_NUEVO}_final")
+    ruta_final = os.path.join(LOG_DIR, f"{MODEL_NAME_NUEVO}_continuado")
     model.save(ruta_final)
     print(f"[GUARDADO] Modelo actualizado guardado en: {ruta_final}.zip")
 

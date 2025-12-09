@@ -20,6 +20,6 @@ def simulateInvertirAction(state, action):
     state.players[state.current_player].economy-=round(INVERTIR_PRC*action.unidades,1)
     state.players[state.current_player].economy=round(state.players[state.current_player].economy,1)
     state.players[state.current_player].development+=round(INVERTIR_DEVP*action.unidades,1)
-    state.players[state.current_player].development=round(state.players[state.current_player].development,1)
+    state.players[state.current_player].development=round(min(state.players[state.current_player].development,10.0),1)
     
     #print(f"El jugador {state.current_player} tenia {prev} monedas y se ha hecho {action.unidades} Inversiones. Su nuevo desarrollo es de {state.players[state.current_player].development}. Le quedan {state.players[state.current_player].economy} monedas")

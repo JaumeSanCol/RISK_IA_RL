@@ -5,6 +5,7 @@ import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
 import itertools
+from atributos.soldados import tropas_jugador
 
 # Configuración de rutas para encontrar risktools.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +19,12 @@ import risktools
 import risktools
 from config_atrib import *
 
+multiplicador={
+    "standard":2.5,     # minimo 2.1
+    "aggressive":5,     # minimo 4.2
+    "defensive":8,      # equivale a tener 8000 tropas vivas el minimo real es 851
+    "capitalist":1.5    # minimo 1.0
+}
 class RiskTotalControlEnv(gym.Env):
     """
     Entorno Gymnasium para entrenar agentes de RISK.
@@ -171,7 +178,7 @@ class RiskTotalControlEnv(gym.Env):
             if self.player_idx in winners and len(winners) == 1:
                 # ¡VICTORIA!
                 b_r=3000-self.current_step_count # bonus por rapidez
-                reward+=10_000+(b_r*5) # El multiplicador por rapidez debe ser mayor que 4.2
+                reward+=10_000+(b_r*multiplicador[self.style]) # El multiplicador por rapidez debe ser mayor que el valor máximo de no hacer nada
             else:
                 reward -= 10_000 # DERROTA
         
@@ -213,21 +220,17 @@ class RiskTotalControlEnv(gym.Env):
             # GRAN premio por conquistar al menos un territorio en este turno
             if me.conquered_territory:
                 reward += 2.0  
-            # Pequeña penalización por tener tropas ociosas (incentiva usarlas)
-            reward -= me.free_armies * 0.01
 
         # --- ESTILO: DEFENSIVE (La Tortuga) ---
         elif self.style == "defensive":
             # Premia la cantidad total de tropas vivas
-            total_troops = sum(self.state.armies[i] for i in range(self.n_territories) if self.state.owners[i] == self.player_idx)
-            reward += total_troops * 0.05
+            total_troops = tropas_jugador(self.state, self.player_idx)
+            reward += total_troops * 0.001
             # Premia simplemente sobrevivir
             reward += 0.5
 
         # --- ESTILO: CAPITALIST (El Banquero) ---
         elif self.style == "capitalist":
-            # Premia acumular dinero
-            reward += me.economy * 0.05
             # Premia el desarrollo económico
             reward += me.development * 0.1
 
