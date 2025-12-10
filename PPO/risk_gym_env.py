@@ -17,11 +17,12 @@ import risktools
 from config_atrib import *
 
 multiplicador={
-    "standard":2.5,
-    "aggressive":5,
-    "defensive":8,
-    "capitalist":1.5
+    "standard":3,
+    "aggressive":7,
+    "defensive":10,
+    "capitalist":2# 
 }
+MAX_STEPS=3000
 
 class RiskTotalControlEnv(gym.Env):
     """
@@ -29,7 +30,7 @@ class RiskTotalControlEnv(gym.Env):
     """
     metadata = {'render_modes': ['human']}
 
-    def __init__(self, enemy_ai_class=None, style="standard", max_steps=3000, n_players=4):
+    def __init__(self, enemy_ai_class=None, style="standard", max_steps=MAX_STEPS, n_players=4):
         """
         Args:
             n_players (int): Número total de jugadores (1 Agente + n-1 Bots).
@@ -141,7 +142,7 @@ class RiskTotalControlEnv(gym.Env):
             
             # Si estoy en la lista de ganadores y soy el único vivo (o gané por objetivo)
             if self.player_idx in winners and len(winners) == 1:
-                b_r = 3000 - self.current_step_count
+                b_r = MAX_STEPS - self.current_step_count
                 reward += 10_000 + (b_r * multiplicador[self.style])
             else:
                 reward -= 10_000 # Perdí
@@ -153,7 +154,7 @@ class RiskTotalControlEnv(gym.Env):
             # Chequear si morí mientras jugaban los otros
             if self.state.players[self.player_idx].game_over:
                 terminated = True
-                reward -= 10_000
+                reward -= 5_000 * multiplicador[self.style]
             elif self.state.turn_type == 'GameOver':
                  terminated = True
                  # (Aquí se podría añadir lógica extra si ganamos pasivamente, raro en Risk)
@@ -162,7 +163,9 @@ class RiskTotalControlEnv(gym.Env):
         if self.current_step_count >= self.max_steps:
             truncated = True
             if not terminated:
-                reward -= 100_000 # Penalización por empate eterno
+                my_territories = sum(1 for o in self.state.owners if o == self.player_idx)
+                dif=42-my_territories
+                reward -= 15_000*dif # Penalización por empate eterno
 
         return self._get_obs(), reward, terminated, truncated, info
 
@@ -270,6 +273,7 @@ class RiskTotalControlEnv(gym.Env):
         me = self.state.players[self.player_idx]
         my_territories = sum(1 for o in self.state.owners if o == self.player_idx)
         reward = 0
+        reward+=min(me.happiness,50)*0.01
         if self.style == "standard":
             reward += my_territories * 0.05
         elif self.style == "aggressive":

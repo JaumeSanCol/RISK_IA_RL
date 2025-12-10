@@ -3,15 +3,29 @@ from config_atrib import *
 from clases.action import *
 def getFestinActions(state):
     """
-     Devuelve la una lista con la cantida que puede gastar el jugador en festines
+     Devuelve las opciones de gasto en festines (25%, 50%, 75%, 100%)
     """
     actions = []
-    # Calculamos el máximo de soldados que puede comprar
-    max_inversion=int(state.players[state.current_player].economy//FESTIN_PRC)
-    if max_inversion<1:return None
-    for i in range(1,max_inversion+1):
-        action=RiskAction('Festin', None, None,i)
-        actions.append(action)
+    
+    max_inversion = int(state.players[state.current_player].economy // FESTIN_PRC)
+    
+    if max_inversion < 1:
+        return None
+
+    quarter = max_inversion // 4
+    
+    if quarter == 0:
+        actions.append(RiskAction('Festin', None, None, max_inversion))
+    
+    else:
+        amounts = [quarter, quarter * 2, quarter * 3, max_inversion]
+        
+        prev_val = 0
+        for amount in amounts:
+            if amount > prev_val:
+                actions.append(RiskAction('Festin', None, None, amount))
+                prev_val = amount
+
     return actions
 
 def simulateFestinAction(state, action):

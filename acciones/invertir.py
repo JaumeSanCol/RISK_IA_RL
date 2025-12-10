@@ -3,15 +3,30 @@ from config_atrib import *
 from clases.action import *
 def getInvertirActions(state):
     """
-     Devuelve la una lista con la cantida que puede invertir el jugador
+     Devuelve las opciones de inversión (25%, 50%, 75%, 100%)
     """
     actions = []
-    # Calculamos el máximo de soldados que puede comprar
-    max_inversion=int(state.players[state.current_player].economy//INVERTIR_PRC)
-    if max_inversion<1:return None
-    for i in range(1,max_inversion+1):
-        action=RiskAction('Invertir', None, None,i)
-        actions.append(action)
+    
+    # Calculamos la cantidad máxima que puede invertir
+    max_inversion = int(state.players[state.current_player].economy // INVERTIR_PRC)
+    
+    if max_inversion < 1:
+        return None
+
+    quarter = max_inversion // 4
+    
+    if quarter == 0:
+        actions.append(RiskAction('Invertir', None, None, max_inversion))
+        
+    else:
+        amounts = [quarter, quarter * 2, quarter * 3, max_inversion]
+        
+        prev_val = 0
+        for amount in amounts:
+            if amount > prev_val:
+                actions.append(RiskAction('Invertir', None, None, amount))
+                prev_val = amount
+
     return actions
 
 def simulateInvertirAction(state, action):

@@ -92,14 +92,18 @@ def simulateAction(input_state, action):
         avanz_fase = nextFase(state, action)
 
         if avanz_fase:
-            # Si el jugador es el jugador con el numero más alto de la lista owners significa que es el último
-            if state.fase!='fase_0' and state.current_player==max([x for x in state.owners if x is not None]):
-                state.mes = (state.mes % 12) + 1
-            nextPlayer(state) # Avanza al siguiente jugador
-    
-            if state.fase == 'fase_1': #FIN DEL TURNO
-                updateHappinessFinTurno(state)
-                beginTurn(state)    
+            if state.turn_type != "GameOver":
+                try:
+                    # Si el jugador es el jugador con el numero más alto de la lista owners significa que es el último
+                    if state.fase!='fase_0' and state.current_player==max([x for x in state.owners if x is not None]):
+                        state.mes = (state.mes % 12) + 1
+                    nextPlayer(state) # Avanza al siguiente jugador
+                except:
+                    # todos muertos
+                    state.turn_type = "GameOver"
+                if state.fase == 'fase_1': #FIN DEL TURNO
+                    updateHappinessFinTurno(state)
+                    beginTurn(state)    
                 
         
     return rstates, rsprobs

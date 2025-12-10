@@ -4,15 +4,30 @@ from clases.action import *
 
 def getComprarSoldadosActions(state):
     """
-     Devuelve la una lista con la cantidad de soldados que puede comprar el jugador
+     Devuelve las opciones de compra de soldados (25%, 50%, 75%, 100%)
     """
     actions = []
+    
     # Calculamos el máximo de soldados que puede comprar
-    max_soldados=int(state.players[state.current_player].economy//SOLDADOS_PRC)
-    if max_soldados<1:return None
-    for i in range(1,max_soldados+1):
-        action=RiskAction('Comprar_Soldados', None, None,i)
-        actions.append(action)
+    max_soldados = int(state.players[state.current_player].economy // SOLDADOS_PRC)
+    
+    if max_soldados < 1:
+        return None
+
+    quarter = max_soldados // 4
+    
+    if quarter == 0:
+        actions.append(RiskAction('Comprar_Soldados', None, None, max_soldados))
+    
+    else:
+        amounts = [quarter, quarter * 2, quarter * 3, max_soldados]
+        
+        prev_val = 0
+        for amount in amounts:
+            if amount > prev_val:
+                actions.append(RiskAction('Comprar_Soldados', None, None, amount))
+                prev_val = amount
+
     return actions
 
 def simulateComprarSoldadosAction(state, action):

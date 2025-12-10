@@ -12,7 +12,7 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from risk_gym_env import RiskTotalControlEnv
 
 # --- CONFIGURACIÓN DEL ENTRENAMIENTO ---
-TIMESTEPS = 500_000  
+TIMESTEPS = 1_000_000  
 LOG_DIR = "./logs_ppo/"
 SAVE_FREQ = 5_000
 
@@ -23,7 +23,7 @@ STYLE = "aggressive"  # "standard", "aggressive", "defensive", "capitalist"
 # 2 = 1vs1 
 # 4 = 1 Agente vs 3 Bots 
 # 6 = 1 Agente vs 5 Bots 
-N_PLAYERS = 4 
+N_PLAYERS = 6
 
 # Actualizamos el nombre para distinguir modelos de duelo vs modelos de 4 jugadores
 MODEL_NAME = f"risk_ppo_{STYLE}_{N_PLAYERS}p" 

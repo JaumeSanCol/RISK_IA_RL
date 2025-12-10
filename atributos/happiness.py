@@ -80,7 +80,7 @@ def checkRevolucion(state,player):
         tropas_player=tropas_jugador(state,player)
         territorios_player=state.owners.count(player)
         
-        if tropas_player>2*territorios_player:
+        if tropas_player>4*territorios_player:
             #print(f"El jugador {state.players[player].name} ha sufrido una revuelta pero se ha impuesto el ejercito.")
             state.players[player].happiness+=BONO_HAPP_AUTRT
             state.players[player].development+=PENL_DVP_REVOL
