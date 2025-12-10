@@ -1,0 +1,460 @@
+"""
+ÍNDICE DE ARCHIVOS - RL SIMULATION SYSTEM
+==========================================
+
+Este archivo proporciona un overview rápido de todos los archivos creados
+y qué hace cada uno.
+"""
+
+# ==============================================================================
+# ARCHIVOS CREADOS
+# ==============================================================================
+
+FILES_CREATED = {
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # NÚCLEO DEL SISTEMA (Core)
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    "ppo_loader.py": {
+        "tipo": "Módulo Python",
+        "descripción": "Cargador de modelos PPO. Encapsula un modelo entrenado como IA compatible.",
+        "clase_principal": "PPOPlayer",
+        "métodos_clave": [
+            "getAction(state) -> RiskAction",
+            "_load_model()",
+            "_decode_action_from_encoded()",
+            "_get_random_action()",
+        ],
+        "dependencias": ["sb3_contrib", "risk_gym_env", "risktools"],
+        "líneas": 300,
+        "uso": "from ppo_loader import PPOPlayer",
+    },
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # SIMULADORES (Executables)
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    "play_rl_vs_rl.py": {
+        "tipo": "Script ejecutable",
+        "descripción": "Simula partidas entre modelos RL. Genera logs compatibles con GUI.",
+        "uso_comandos": [
+            "python play_rl_vs_rl.py logs_ppo/model1.zip logs_ppo/model2.zip -n 5 -w -v",
+            "python play_rl_vs_rl.py logs_ppo/*.zip -n 10 -w",
+        ],
+        "parámetros": {
+            "modelos": "Rutas a archivos .zip (mínimo 2)",
+            "-n": "Número de partidas por RL como inicial (default: 5)",
+            "-w": "Guardar logs en ../logs/",
+            "-v": "Modo verbose (mostrar detalles)",
+        },
+        "entrada": "modelos .zip, argumentos CLI",
+        "salida": "logs/RISKGAME_RLVRL_*.log, estadísticas en stdout",
+        "líneas": 500,
+    },
+    
+    "play_rl_vs_heuristics.py": {
+        "tipo": "Script ejecutable",
+        "descripción": "Simula partidas entre RL y heurísticas. Detección automática de tipo.",
+        "uso_comandos": [
+            "python play_rl_vs_heuristics.py logs_ppo/model.zip ../ai/heur.py -n 5 -w",
+            "python play_rl_vs_heuristics.py model1.zip model2.zip heur.py -n 3 -v",
+        ],
+        "parámetros": {
+            "ias": "Mezcla de .zip (RL) y .py (heurística)",
+            "-n": "Partidas por IA como inicial (default: 5)",
+            "-w": "Guardar logs",
+            "-v": "Modo verbose",
+        },
+        "entrada": "IAs .zip y .py, argumentos CLI",
+        "salida": "logs/RISKGAME_RLVSHEUR_*.log, estadísticas",
+        "líneas": 550,
+    },
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # DOCUMENTACIÓN
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    "README_RL_SIMULATION.md": {
+        "tipo": "Documentación Markdown",
+        "descripción": "Guía completa del sistema. START HERE.",
+        "secciones": [
+            "Descripción General",
+            "Componentes (ppo_loader, play_rl_vs_rl, play_rl_vs_heuristics)",
+            "Instalación",
+            "Uso (3 escenarios principales)",
+            "Ejemplos Prácticos",
+            "Formato de Logs",
+            "Visualización en GUI",
+            "Troubleshooting",
+            "API Reference",
+            "Configuración Avanzada",
+            "FAQ",
+        ],
+        "audiencia": "Usuarios finales, desarrolladores",
+        "palabras": 4500,
+    },
+    
+    "QUICK_EXAMPLES.py": {
+        "tipo": "Referencia de Comandos",
+        "descripción": "10 escenarios de uso listos para copiar/pegar.",
+        "ejemplos": [
+            "RL vs RL (dos modelos)",
+            "RL vs RL (tres modelos)",
+            "RL vs Heurísticas (1+2)",
+            "Mezcla RL + Heurística",
+            "Prueba rápida verbose",
+            "Torneo extenso",
+            "Comparar versiones",
+            "RL vs todas las heurísticas",
+            "Generación masiva paralela",
+            "Reproducir en GUI",
+        ],
+        "tips": [
+            "Rutas relativas",
+            "Wildcards",
+            "Redirección de output",
+            "Ejecución en background",
+            "Timeout",
+            "Medición de tiempo",
+        ],
+        "líneas": 250,
+    },
+    
+    "ARCHITECTURE.py": {
+        "tipo": "Documentación Técnica",
+        "descripción": "Diagramas y flujos de datos del sistema.",
+        "contenido": [
+            "Arquitectura general (6 niveles)",
+            "Flujo detallado de un turno",
+            "Estructura de datos RiskState",
+            "Dependencias e imports",
+            "Configuración de hiperparámetros",
+        ],
+        "audiencia": "Desarrolladores, personas que quieren entender internals",
+        "líneas": 350,
+    },
+    
+    "validate_installation.py": {
+        "tipo": "Script de Validación",
+        "descripción": "Valida la instalación y diagnostica problemas.",
+        "funciones": {
+            "check_installation()": "Verifica archivos, directorios, dependencias",
+            "test_ppo_loading()": "Intenta cargar un modelo PPO",
+            "test_risktools_access()": "Verifica acceso a risktools",
+            "run_full_diagnostics()": "Ejecuta todos los tests",
+            "interactive_troubleshooting()": "Guía interactiva de problemas",
+        },
+        "uso": "python validate_installation.py [command]",
+        "comandos": ["all", "install", "ppo", "risktools", "troubleshoot"],
+        "líneas": 400,
+    },
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # ESTE ARCHIVO
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    "INDEX.txt": {
+        "tipo": "Referencia (este archivo)",
+        "descripción": "Overview de todos los archivos creados.",
+        "propósito": "Navegar y entender la estructura del proyecto",
+    },
+}
+
+
+# ==============================================================================
+# FLUJO DE TRABAJO RECOMENDADO
+# ==============================================================================
+
+WORKFLOW = """
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FLUJO DE TRABAJO RECOMENDADO                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PASO 1: VALIDACIÓN INICIAL
+──────────────────────────────────────────────────────────────────────────────
+   $ cd PPO/
+   $ python validate_installation.py all
+   
+   ✓ Si todo está OK, continúa a PASO 2
+   ✗ Si hay errores, ejecuta: python validate_installation.py troubleshoot
+
+
+PASO 2: ENTRENAR MODELOS (opcional, si no existen)
+──────────────────────────────────────────────────────────────────────────────
+   $ python train_ppo.py
+   → Genera logs_ppo/risk_ppo_*.zip
+   
+   (Si ya tienes modelos, salta a PASO 3)
+
+
+PASO 3: SIMULAR PARTIDAS
+──────────────────────────────────────────────────────────────────────────────
+   
+   OPCIÓN A: RL vs RL
+   $ python play_rl_vs_rl.py \\
+       logs_ppo/model1.zip \\
+       logs_ppo/model2.zip \\
+       -n 5 -w -v
+   
+   OPCIÓN B: RL vs Heurísticas
+   $ python play_rl_vs_heuristics.py \\
+       logs_ppo/model.zip \\
+       ../ai/heuristic_ai.py \\
+       -n 5 -w -v
+   
+   → Genera logs/RISKGAME_*.log
+
+
+PASO 4: VISUALIZAR EN GUI
+──────────────────────────────────────────────────────────────────────────────
+   $ cd ..
+   $ python risk_game_viewer.py logs/RISKGAME_RLVRL_20241210-153045.log
+   
+   → Reproduce la partida paso a paso en la GUI
+
+
+PASO 5: ANALIZAR RESULTADOS
+──────────────────────────────────────────────────────────────────────────────
+   • Lee las estadísticas impresas en terminal
+   • Visualiza varias partidas en GUI
+   • Decide si reentrenar con diferentes parámetros
+   • Vuelve a PASO 2 o 3 según sea necesario
+"""
+
+
+# ==============================================================================
+# GUÍA RÁPIDA POR CASO DE USO
+# ==============================================================================
+
+QUICK_START = """
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           GUÍA RÁPIDA                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+❓ "Quiero comparar dos modelos RL"
+───────────────────────────────────────────────────────────────────────────
+   1. Lee: README_RL_SIMULATION.md → Escenario 1
+   2. Ejecuta: python play_rl_vs_rl.py model1.zip model2.zip -n 10 -w
+   3. Analiza: Resultados estadísticos en terminal
+   4. Visualiza: python ../risk_game_viewer.py logs/RISKGAME_*.log
+
+
+❓ "Quiero probar mi modelo RL contra heurísticas"
+───────────────────────────────────────────────────────────────────────────
+   1. Lee: README_RL_SIMULATION.md → Escenario 2
+   2. Ejecuta: python play_rl_vs_heuristics.py model.zip ../ai/*.py -n 5 -w
+   3. Analiza: Tabla de victorias por tipo de IA
+   4. Conclusión: ¿El RL es mejor que heurísticas?
+
+
+❓ "Solo quiero ver una partida en la GUI"
+───────────────────────────────────────────────────────────────────────────
+   1. Ejecuta: python play_rl_vs_rl.py model1.zip model2.zip -n 1 -w
+   2. Espera a que termine
+   3. Abre: python ../risk_game_viewer.py logs/RISKGAME_RLVRL_*.log
+   4. Reproduce: Visualiza la partida completa
+
+
+❓ "Generé muchos logs, ¿cómo los veo todos?"
+───────────────────────────────────────────────────────────────────────────
+   1. Terminal: ls -lrt ../logs/
+   2. Ver más reciente: tail ../logs/
+   3. Para cada uno: python ../risk_game_viewer.py ../logs/RISKGAME_*.log
+   4. O script: for log in ../logs/RISKGAME_*.log; do
+                  echo "Abre: $log"
+                done
+
+
+❓ "¿Qué hacer si algo falla?"
+───────────────────────────────────────────────────────────────────────────
+   1. Ejecuta: python validate_installation.py troubleshoot
+   2. Lee: README_RL_SIMULATION.md → Troubleshooting
+   3. Consulta: ARCHITECTURE.py para entender internals
+   4. Debug: Usa -v en play_rl_vs_rl.py para ver detalles
+"""
+
+
+# ==============================================================================
+# MATRIZ DE DEPENDENCIAS
+# ==============================================================================
+
+DEPENDENCIES = """
+Archivo A → Archivo B  (A depende de B)
+
+play_rl_vs_rl.py
+  ├─→ ppo_loader.py
+  ├─→ risktools.py (parent_dir)
+  ├─→ config_atrib.py (parent_dir)
+  └─→ world.zip (parent_dir)
+
+play_rl_vs_heuristics.py
+  ├─→ ppo_loader.py
+  ├─→ risktools.py (parent_dir)
+  ├─→ config_atrib.py (parent_dir)
+  ├─→ Módulos .py dinámicos (parent_dir/ai/)
+  └─→ world.zip (parent_dir)
+
+ppo_loader.py
+  ├─→ sb3_contrib (external)
+  ├─→ risk_gym_env.py (para métodos auxiliares)
+  ├─→ risktools.py (parent_dir)
+  └─→ MaskablePPO (external)
+
+validate_installation.py
+  ├─→ ppo_loader.py
+  ├─→ risktools.py
+  └─→ risk_gym_env.py
+"""
+
+
+# ==============================================================================
+# TAMAÑOS Y STATS
+# ==============================================================================
+
+STATS = """
+Tamaño total del código creado:
+  ppo_loader.py              ~300 líneas
+  play_rl_vs_rl.py          ~500 líneas
+  play_rl_vs_heuristics.py   ~550 líneas
+  README_RL_SIMULATION.md    ~800 líneas (documentación)
+  QUICK_EXAMPLES.py          ~250 líneas (ejemplos)
+  ARCHITECTURE.py            ~350 líneas (referencias técnicas)
+  validate_installation.py   ~400 líneas (validación)
+  ────────────────────────────────────
+  TOTAL                      ~3150 líneas de código/docs
+
+Archivos generados:
+  • 7 nuevos archivos en PPO/
+  • 100% compatible con ecosystem existente
+  • 0 modificaciones a código existente
+
+Tiempo esperado de primera ejecución:
+  • Validación: 30 segundos
+  • Una partida simple: 2-5 minutos (depende de CPU)
+  • Torneo (10 partidas): 20-50 minutos
+"""
+
+
+# ==============================================================================
+# ESTRUCTURA FINAL DE DIRECTORIOS
+# ==============================================================================
+
+FINAL_STRUCTURE = """
+RISK_IA_RL/
+│
+├── PPO/                                ← TÚ ESTÁS AQUÍ
+│   ├── [NUEVOS ARCHIVOS]
+│   │   ├── ppo_loader.py              ← Cargador de modelos PPO
+│   │   ├── play_rl_vs_rl.py           ← Simulador RL vs RL
+│   │   ├── play_rl_vs_heuristics.py   ← Simulador RL vs Heur
+│   │   ├── README_RL_SIMULATION.md    ← Documentación PRINCIPAL
+│   │   ├── QUICK_EXAMPLES.py          ← Comandos listos para usar
+│   │   ├── ARCHITECTURE.py            ← Documentación técnica
+│   │   ├── validate_installation.py   ← Script de validación
+│   │   └── INDEX.txt                  ← Este archivo
+│   │
+│   ├── logs_ppo/                       ← Modelos entrenados
+│   │   ├── risk_ppo_aggressive.zip
+│   │   ├── risk_ppo_defensive.zip
+│   │   └── ...
+│   │
+│   ├── train_ppo.py                    ← Script de entrenamiento
+│   ├── risk_gym_env.py                 ← Entorno Gymnasium
+│   ├── ppo_player.py                   ← IA PPO (old)
+│   └── test_player.py
+│
+├── ai/                                 ← IAs heurísticas
+│   ├── attacker_ai.py
+│   ├── random_ai.py
+│   ├── heuristic_ai.py
+│   └── ...
+│
+├── logs/                               ← LOGS GENERADOS AQUÍ
+│   ├── RISKGAME_RLVRL_20241210-153045.log
+│   ├── RISKGAME_RLVSHEUR_20241210-153125.log
+│   └── ...
+│
+├── risktools.py                        ← Motor principal de RISK
+├── play_risk_ai.py                     ← Script antiguo (referencia)
+├── risk_game_viewer.py                 ← GUI para ver logs
+├── config_atrib.py
+├── world.zip                           ← Tablero del juego
+└── ...
+"""
+
+
+# ==============================================================================
+# PUNTOS DE ENTRADA (ENTRY POINTS)
+# ==============================================================================
+
+ENTRY_POINTS = """
+¿Por dónde empiezo?
+═══════════════════════════════════════════════════════════════════════════════
+
+1. PRIMERO: Lee la documentación
+   ├─→ README_RL_SIMULATION.md (sección: Descripción General)
+   └─→ Tiempo: 10-15 minutos
+
+2. LUEGO: Valida tu sistema
+   ├─→ python validate_installation.py all
+   └─→ Tiempo: 1-2 minutos
+
+3. DESPUÉS: Ejecuta tu primer ejemplo
+   ├─→ Lee QUICK_EXAMPLES.py (Escenario 1 o 2)
+   ├─→ Copia el comando
+   ├─→ Ejecuta desde PPO/
+   └─→ Tiempo: 5-30 minutos según número de partidas
+
+4. FINALMENTE: Visualiza los resultados
+   ├─→ python ../risk_game_viewer.py logs/RISKGAME_*.log
+   └─→ Reproducción interactiva en GUI
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Archivos clave por rol:
+
+╭─ Si eres USUARIO final
+├─→ README_RL_SIMULATION.md (todo lo que necesitas)
+├─→ QUICK_EXAMPLES.py (comandos listos)
+└─→ validate_installation.py (solución de problemas)
+
+╭─ Si eres DESARROLLADOR
+├─→ ARCHITECTURE.py (entiende el sistema)
+├─→ ppo_loader.py (API de la librería)
+├─→ play_rl_vs_rl.py (estructura de flujo)
+└─→ validate_installation.py (debugging)
+
+╭─ Si necesitas TROUBLESHOOT
+├─→ README_RL_SIMULATION.md → Troubleshooting
+├─→ validate_installation.py troubleshoot (interactivo)
+└─→ ARCHITECTURE.py → Entender flujo completo
+"""
+
+
+# ==============================================================================
+# RESUMEN FINAL
+# ==============================================================================
+
+if __name__ == "__main__":
+    print("\n" + "="*80)
+    print("ÍNDICE DE ARCHIVOS - RL SIMULATION SYSTEM".center(80))
+    print("="*80 + "\n")
+    
+    print("📦 ARCHIVOS CREADOS:")
+    print("─"*80)
+    for filename, info in FILES_CREATED.items():
+        print(f"\n  ✓ {filename}")
+        print(f"    Tipo: {info.get('tipo', 'N/A')}")
+        print(f"    Descripción: {info.get('descripción', 'N/A')}")
+    
+    print("\n\n" + "="*80)
+    print(f"TOTAL: {len(FILES_CREATED)} archivos creados | ~3150 líneas de código")
+    print("="*80 + "\n")
+    
+    print(WORKFLOW)
+    print("\n" + ENTRY_POINTS)
+    
+    print("\n" + "="*80)
+    print("¡LISTO PARA USAR! Comienza por: python validate_installation.py all")
+    print("="*80 + "\n")

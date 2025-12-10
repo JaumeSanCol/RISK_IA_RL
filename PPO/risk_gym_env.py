@@ -313,27 +313,81 @@ class RiskTotalControlEnv(gym.Env):
         return np.concatenate([mask_type,mask_src,mask_dst,mask_amt])
 
     def _decode_action(self, type_idx, src_id, dst_id, amt_idx):
-        # Mismo código anterior
+        """
+        Decodifica índices numéricos a RiskAction.
+        Tipo: 0=Pasar, 1=Comprar_Soldados, 2=Place, 3=Attack, 4=Occupy, 5=Fortify, 6=Invertir
+        Robusto: Busca coincidir por nombre de territorio, con varios niveles de fallback.
+        """
         allowed_dict = risktools.getAllowedFaseActions(self.state)
         type_map = {0: 'Pasar', 1: 'Comprar_Soldados', 2: 'Place', 3: 'Attack', 4: 'Occupy', 5: 'Fortify', 6: 'Invertir'}
         target_type = type_map.get(type_idx)
-        if target_type == 'Place' and 'PrePlace' in allowed_dict: target_type = 'PrePlace'
-        if target_type not in allowed_dict: return None
+        
+        # Ajustar tipo si es PrePlace
+        if target_type == 'Place' and 'PrePlace' in allowed_dict: 
+            target_type = 'PrePlace'
+        
+        if target_type not in allowed_dict: 
+            return None
+        
         candidates = allowed_dict[target_type]
-        if not candidates: return None
-        def norm(s): return str(s).lower().replace(" ", "").replace("_","") if s else ""
+        if not candidates: 
+            return None
+        
+        def norm(s): 
+            return str(s).lower().replace(" ", "").replace("_","") if s else ""
+        
+        # Obtener nombres de territorios desde IDs
         src_name = norm(self.board.territories[src_id].name) if src_id < self.n_territories else None
         dst_name = norm(self.board.territories[dst_id].name) if dst_id < self.n_territories else None
+        
+        # NIVEL 1: Buscar acciones con parámetros (no vacías)
+        candidates_with_params = [act for act in candidates 
+                                   if not (act.from_territory is None and act.to_territory is None)]
+        
+        # NIVEL 2: Si no hay acciones con parámetros, usar todas
+        if not candidates_with_params:
+            candidates_with_params = candidates
+        
+        # Buscar mejor coincidencia por nombre
         best_match = None
-        for act in candidates:
-            match_src, match_dst = True, True
-            if hasattr(act, "from_territory") and act.from_territory: match_src = (norm(act.from_territory) == src_name)
-            if hasattr(act, "to_territory") and act.to_territory: match_dst = (norm(act.to_territory) == dst_name)
-            if match_src and match_dst:
+        best_score = -1
+        
+        for act in candidates_with_params:
+            match_score = 0
+            
+            # Verificar coincidencia de from_territory
+            if hasattr(act, "from_territory") and act.from_territory:
+                if norm(act.from_territory) == src_name:
+                    match_score += 1
+            
+            # Verificar coincidencia de to_territory
+            if hasattr(act, "to_territory") and act.to_territory:
+                if norm(act.to_territory) == dst_name:
+                    match_score += 1
+            
+            # Guardar la mejor coincidencia
+            if match_score > best_score:
+                best_score = match_score
                 best_match = act
-                break
-        if best_match is None: return None
-        amount = max(1, amt_idx)
-        if hasattr(best_match, "armies"): best_match.armies = amount
-        if hasattr(best_match, "amount"): best_match.amount = amount
+        
+        # NIVEL 3: Si no hay coincidencia por nombre, usar la primera acción con parámetros
+        if best_match is None:
+            # Preferir acciones con parámetros
+            for act in candidates:
+                if not (act.from_territory is None and act.to_territory is None):
+                    best_match = act
+                    break
+        
+        # NIVEL 4: Último recurso - usar cualquier candidato
+        if best_match is None and candidates:
+            best_match = candidates[0]
+        
+        # Asignar cantidad si corresponde
+        if best_match:
+            amount = max(1, amt_idx)
+            if hasattr(best_match, "armies"): 
+                best_match.armies = amount
+            if hasattr(best_match, "amount"): 
+                best_match.amount = amount
+        
         return best_match
