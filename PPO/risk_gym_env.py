@@ -227,22 +227,35 @@ class RiskTotalControlEnv(gym.Env):
         """Simula turnos de TODOS los rivales hasta que vuelva a ser mi turno."""
         steps = 0
         # Aumentamos el límite de pasos de simulación porque hay más jugadores
-        max_sim_steps = 50 * (self.n_players - 1) 
+        max_sim_steps = 100 * (self.n_players - 1) 
         
         while self.state.current_player != self.player_idx and \
               self.state.turn_type != 'GameOver' and \
               steps < max_sim_steps:
             
-            actions_dict = risktools.getAllowedFaseActions(self.state)
-            all_actions = list(itertools.chain.from_iterable(actions_dict.values()))
+            # --- LÓGICA DE IA ENEMIGA ---
+            action = None
             
-            if not all_actions: 
-                # Si un bot no tiene acciones pero no es GameOver, algo raro pasa, rompemos para evitar cuelgue
-                break
+            # 1. Si se proporcionó una IA Heurística (ej: attacker_ai), usarla
+            if self.enemy_ai is not None:
+                try:
+                    # attacker_ai.getAction(state) devuelve la acción elegida
+                    action = self.enemy_ai.getAction(self.state)
+                except Exception as e:
+                    # Si la heurística falla, hacemos fallback a random para no romper el training
+                    # print(f"[WARNING] Heuristic Error: {e}")
+                    pass
+
+            # 2. Si no hay IA o falló, usar Random (Comportamiento por defecto)
+            if action is None:
+                actions_dict = risktools.getAllowedFaseActions(self.state)
+                all_actions = list(itertools.chain.from_iterable(actions_dict.values()))
+                
+                if not all_actions: 
+                    break # Deadlock o error raro
+                action = random.choice(all_actions)
             
-            # IA Random para los enemigos
-            action = random.choice(all_actions)
-            
+            # --- EJECUCIÓN EN EL SIMULADOR ---
             next_states, probs = risktools.simulateAction(self.state, action)
             
             if len(next_states) > 1:
